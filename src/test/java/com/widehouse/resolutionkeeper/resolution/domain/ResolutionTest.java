@@ -8,13 +8,13 @@ class ResolutionTest {
 
     @Test
     void buildResolutionTest() {
-        Resolution expect = Resolution.builder()
+        Resolution expected = Resolution.builder()
                 .id(1L)
                 .name("resolution")
                 .description("daily resolution")
                 .build();
 
-        then(expect)
+        then(expected)
                 .hasFieldOrPropertyWithValue("id", 1L)
                 .hasFieldOrPropertyWithValue("name", "resolution")
                 .hasFieldOrPropertyWithValue("description", "daily resolution");
