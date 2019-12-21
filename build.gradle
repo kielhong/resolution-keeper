@@ -33,3 +33,11 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+//jacocoTestReport {
+//	afterEvaluate {
+//		classDirectories.setFrom(files(classDirectories.files.collect {
+//			fileTree(dir: it, exclude: ['**/**Application**.*'])
+//		}))
+//	}
+//}
