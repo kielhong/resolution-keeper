@@ -1,5 +1,6 @@
 package com.widehouse.resolutionkeeper.resolution.api;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -39,6 +40,19 @@ class ResolutionControllerTest {
                 .jsonPath("$.id").isEqualTo(10)
                 .jsonPath("$.name").isEqualTo("test")
                 .jsonPath("$.description").isEqualTo("daybyday");
+        // then
+        verify(resolutionService).get(10L);
+    }
+
+    @Test
+    void givenMonoEmpty_WhenGetResolutionById_Then404() {
+        // given
+        given(resolutionService.get(anyLong()))
+                .willReturn(Mono.empty());
+        // when
+        webClient.get().uri("/resolutions/{id}", 10)
+                .exchange()
+                .expectStatus().isNotFound();
         // then
         verify(resolutionService).get(10L);
     }
