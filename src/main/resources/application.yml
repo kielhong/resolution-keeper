@@ -1,1 +1,3 @@
 
+logging.level:
+  reactor.core.publisher: INFO

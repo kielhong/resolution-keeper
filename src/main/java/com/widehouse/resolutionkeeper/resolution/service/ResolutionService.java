@@ -3,20 +3,23 @@ package com.widehouse.resolutionkeeper.resolution.service;
 import com.widehouse.resolutionkeeper.resolution.domain.Resolution;
 import com.widehouse.resolutionkeeper.resolution.domain.ResolutionRepository;
 
-import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 @RequiredArgsConstructor
 @Service
 public class ResolutionService {
     private final ResolutionRepository resolutionRepository;
 
+    /**
+     * get a Resolution by Id.
+     * @param id resolution id
+     */
     public Mono<Resolution> get(long id) {
-        Optional<Resolution> optionalResolution = resolutionRepository.findById(id);
-        // TODO : optional empty case
-        return Mono.just(optionalResolution.get());
+        return Mono.fromCallable(() -> resolutionRepository.findById(id))
+                .subscribeOn(Schedulers.boundedElastic())
+                .flatMap(optional -> optional.map(Mono::just).orElseGet(Mono::empty));
     }
 }
