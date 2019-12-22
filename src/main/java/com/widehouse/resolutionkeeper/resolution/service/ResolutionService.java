@@ -27,4 +27,8 @@ public class ResolutionService {
     public Flux<Resolution> list() {
         return Flux.fromIterable(resolutionRepository.findAll());
     }
+
+    public Mono<Resolution> create(Resolution resolution) {
+        return Mono.just(resolutionRepository.save(resolution));
+    }
 }

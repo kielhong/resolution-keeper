@@ -1,5 +1,6 @@
 package com.widehouse.resolutionkeeper.resolution.api;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -14,7 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -73,5 +76,28 @@ class ResolutionControllerTest {
         webClient.get().uri("/resolutions")
                 .exchange()
                 .expectStatus().isOk();
+        verify(resolutionService).list();
+    }
+
+    @Test
+    void givenDto_WhenCreateResolution_ThenReturnCreatedResolution() {
+        // given
+        Resolution resolution = Resolution.builder()
+                .name("test")
+                .description("desc")
+                .build();
+        given(resolutionService.create(any(Resolution.class)))
+                .willReturn(Mono.just(Resolution.builder().id(1L).name("test").description("desc").build()));
+        // when
+        webClient.post().uri("/resolutions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(resolution))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.id").exists()
+                .jsonPath("$.name").isEqualTo("test")
+                .jsonPath("$.description").isEqualTo("desc");
+        verify(resolutionService).create(any(Resolution.class));
     }
 }

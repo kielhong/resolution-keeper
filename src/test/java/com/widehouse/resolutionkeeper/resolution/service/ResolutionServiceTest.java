@@ -1,11 +1,15 @@
 package com.widehouse.resolutionkeeper.resolution.service;
 
+import static org.assertj.core.api.BDDAssertions.then;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 import com.widehouse.resolutionkeeper.resolution.domain.Resolution;
 import com.widehouse.resolutionkeeper.resolution.domain.ResolutionRepository;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -56,10 +61,55 @@ class ResolutionServiceTest {
         given(resolutionRepository.findById(anyLong()))
                 .willReturn(Optional.empty());
         // when
-        Mono<Resolution> expected = service.get(11L);
+        Mono<Resolution> actual = service.get(11L);
         // then
         StepVerifier
-                .create(expected)
+                .create(actual)
                 .verifyComplete();
+    }
+
+    @Test
+    void givenList_WhenListAll_ReturnFlux() {
+        // given
+        Resolution r1 = Resolution.builder().id(1L).name("r1").build();
+        Resolution r2 = Resolution.builder().id(2L).name("r2").build();
+        Resolution r3 = Resolution.builder().id(3L).name("r3").build();
+        given(resolutionRepository.findAll())
+                .willReturn(Arrays.asList(r1, r2, r3));
+        // when
+        Flux<Resolution> actual = service.list();
+        // then
+        StepVerifier
+                .create(actual)
+                .expectNext(r1)
+                .expectNext(r2)
+                .expectNext(r3)
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    void givenResolution_WhenCreate_SaveAndReturnMono() {
+        // given
+        Resolution resolution = Resolution.builder()
+                .name("test")
+                .description("desc")
+                .build();
+        given(resolutionRepository.save(any(Resolution.class)))
+                .willReturn(Resolution.builder().id(1L).name("test").description("desc").build());
+        // when
+        Mono<Resolution> actual = service.create(resolution);
+        // then
+        StepVerifier
+                .create(actual)
+                .expectNextMatches(r -> {
+                    then(r)
+                            .hasFieldOrPropertyWithValue("name", "test")
+                            .hasFieldOrPropertyWithValue("description", "desc");
+                    return true;
+                })
+                .expectComplete()
+                .verify();
+        verify(resolutionRepository).save(any(Resolution.class));
     }
 }

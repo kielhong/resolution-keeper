@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,7 +22,7 @@ public class ResolutionController {
     private final ResolutionService resolutionService;
 
     @GetMapping
-    public Flux<Resolution> getAll() {
+    public Flux<Resolution> getAllResolutions() {
         return resolutionService.list();
     }
 
@@ -29,5 +31,10 @@ public class ResolutionController {
         return resolutionService.get(id)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Resolution:" + id + " Not Found")));
+    }
+
+    @PostMapping
+    public Mono<Resolution> create(@RequestBody ResolutionDto dto) {
+        return resolutionService.create(dto.createEntity());
     }
 }
