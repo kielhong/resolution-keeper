@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
@@ -17,6 +18,11 @@ import reactor.core.publisher.Mono;
 @RequestMapping("resolutions")
 public class ResolutionController {
     private final ResolutionService resolutionService;
+
+    @GetMapping
+    public Flux<Resolution> getAll() {
+        return resolutionService.list();
+    }
 
     @GetMapping("{id}")
     public Mono<Resolution> getById(@PathVariable Long id) {

@@ -7,11 +7,15 @@ import static org.mockito.Mockito.verify;
 import com.widehouse.resolutionkeeper.resolution.domain.Resolution;
 import com.widehouse.resolutionkeeper.resolution.service.ResolutionService;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @WebFluxTest(ResolutionController.class)
@@ -55,5 +59,19 @@ class ResolutionControllerTest {
                 .expectStatus().isNotFound();
         // then
         verify(resolutionService).get(10L);
+    }
+
+    @Test
+    void whenGetAllResolutions_ThenListAll() {
+        // given
+        List<Resolution> list = Arrays.asList(Resolution.builder().id(1L).name("r1").description("rd1").build(),
+                Resolution.builder().id(2L).name("r2").description("rd2").build(),
+                Resolution.builder().id(3L).name("r3").description("rd3").build());
+        given(resolutionService.list())
+                .willReturn(Flux.fromIterable(list));
+        // when
+        webClient.get().uri("/resolutions")
+                .exchange()
+                .expectStatus().isOk();
     }
 }

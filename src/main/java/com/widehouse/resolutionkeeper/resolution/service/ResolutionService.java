@@ -5,6 +5,7 @@ import com.widehouse.resolutionkeeper.resolution.domain.ResolutionRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -21,5 +22,9 @@ public class ResolutionService {
         return Mono.fromCallable(() -> resolutionRepository.findById(id))
                 .subscribeOn(Schedulers.boundedElastic())
                 .flatMap(optional -> optional.map(Mono::just).orElseGet(Mono::empty));
+    }
+
+    public Flux<Resolution> list() {
+        return Flux.fromIterable(resolutionRepository.findAll());
     }
 }
