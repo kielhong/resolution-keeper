@@ -109,4 +109,12 @@ class ResolutionServiceTest {
                 .verify();
         verify(resolutionRepository).save(any(Resolution.class));
     }
+
+    @Test
+    void givenMatchedResolution_WhenRemove_ThenDeleteAResolution() {
+        // when
+        service.remove("13");
+        // then
+        verify(resolutionRepository).deleteById("13");
+    }
 }

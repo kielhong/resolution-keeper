@@ -1,6 +1,9 @@
 spring:
+  main:
+    banner-mode: off
   data:
     mongodb:
       uri: mongodb://localhost:27017/resolution
 logging.level:
-  reactor.core.publisher: INFO
+  org.springframework.data.mongodb.coreMongoTemplate: DEBUG
+#  reactor.core.publisher: INFO

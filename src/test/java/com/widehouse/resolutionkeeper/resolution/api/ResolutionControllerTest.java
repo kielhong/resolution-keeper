@@ -1,7 +1,6 @@
 package com.widehouse.resolutionkeeper.resolution.api;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -100,5 +99,14 @@ class ResolutionControllerTest {
                 .jsonPath("$.name").isEqualTo("test")
                 .jsonPath("$.description").isEqualTo("desc");
         verify(resolutionService).create(any(Resolution.class));
+    }
+
+    @Test
+    void givenResolution_WhenDeleteById_Then200Ok() {
+        // when
+        webClient.delete().uri("/resolutions/{id}", "13")
+                .exchange()
+                .expectStatus().isOk();
+        verify(resolutionService).remove("13");
     }
 }
