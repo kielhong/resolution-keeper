@@ -1,23 +1,22 @@
 package com.widehouse.resolutionkeeper.resolution.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Entity
+@ToString
+@Document(collection = "resolution")
 public class Resolution {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id
+    private String id;
     private String name;
     private String description;
 }

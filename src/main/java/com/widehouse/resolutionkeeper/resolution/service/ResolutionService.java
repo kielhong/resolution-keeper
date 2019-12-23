@@ -18,7 +18,7 @@ public class ResolutionService {
      * get a Resolution by Id.
      * @param id resolution id
      */
-    public Mono<Resolution> get(long id) {
+    public Mono<Resolution> get(String id) {
         return Mono.fromCallable(() -> resolutionRepository.findById(id))
                 .subscribeOn(Schedulers.boundedElastic())
                 .flatMap(optional -> optional.map(Mono::just).orElseGet(Mono::empty));

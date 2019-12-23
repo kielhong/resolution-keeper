@@ -26,8 +26,13 @@ public class ResolutionController {
         return resolutionService.list();
     }
 
+    /**
+     * get Mono Resolution by id.
+     * if Resolution is not found then 404 Not Found
+     * @param id id of Resolution
+     */
     @GetMapping("{id}")
-    public Mono<Resolution> getById(@PathVariable Long id) {
+    public Mono<Resolution> getById(@PathVariable String id) {
         return resolutionService.get(id)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Resolution:" + id + " Not Found")));

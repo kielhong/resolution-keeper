@@ -2,6 +2,7 @@ package com.widehouse.resolutionkeeper.resolution.api;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -33,43 +34,43 @@ class ResolutionControllerTest {
     void testGetResolutionById() {
         // given
         Resolution resolution = Resolution.builder()
-                .id(10L)
+                .id("10")
                 .name("test")
                 .description("daybyday")
                 .build();
-        given(resolutionService.get(10L))
+        given(resolutionService.get("10"))
             .willReturn(Mono.just(resolution));
         // when
-        webClient.get().uri("/resolutions/{id}", 10)
+        webClient.get().uri("/resolutions/{id}", "10")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$.id").isEqualTo(10)
+                .jsonPath("$.id").isEqualTo("10")
                 .jsonPath("$.name").isEqualTo("test")
                 .jsonPath("$.description").isEqualTo("daybyday");
         // then
-        verify(resolutionService).get(10L);
+        verify(resolutionService).get("10");
     }
 
     @Test
     void givenMonoEmpty_WhenGetResolutionById_Then404() {
         // given
-        given(resolutionService.get(anyLong()))
+        given(resolutionService.get(anyString()))
                 .willReturn(Mono.empty());
         // when
         webClient.get().uri("/resolutions/{id}", 10)
                 .exchange()
                 .expectStatus().isNotFound();
         // then
-        verify(resolutionService).get(10L);
+        verify(resolutionService).get("10");
     }
 
     @Test
     void whenGetAllResolutions_ThenListAll() {
         // given
-        List<Resolution> list = Arrays.asList(Resolution.builder().id(1L).name("r1").description("rd1").build(),
-                Resolution.builder().id(2L).name("r2").description("rd2").build(),
-                Resolution.builder().id(3L).name("r3").description("rd3").build());
+        List<Resolution> list = Arrays.asList(Resolution.builder().id("1").name("r1").description("rd1").build(),
+                Resolution.builder().id("2").name("r2").description("rd2").build(),
+                Resolution.builder().id("3").name("r3").description("rd3").build());
         given(resolutionService.list())
                 .willReturn(Flux.fromIterable(list));
         // when
@@ -87,7 +88,7 @@ class ResolutionControllerTest {
                 .description("desc")
                 .build();
         given(resolutionService.create(any(Resolution.class)))
-                .willReturn(Mono.just(Resolution.builder().id(1L).name("test").description("desc").build()));
+                .willReturn(Mono.just(Resolution.builder().id("1").name("test").description("desc").build()));
         // when
         webClient.post().uri("/resolutions")
                 .contentType(MediaType.APPLICATION_JSON)

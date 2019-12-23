@@ -3,6 +3,7 @@ package com.widehouse.resolutionkeeper.resolution.service;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -39,14 +40,14 @@ class ResolutionServiceTest {
     void givenResolution_WhenGetById_ThenMonoResolution() {
         // given
         Resolution resolution = Resolution.builder()
-                .id(10L)
+                .id("10")
                 .name("test")
                 .description("daybyday")
                 .build();
-        given(resolutionRepository.findById(anyLong()))
+        given(resolutionRepository.findById(anyString()))
                 .willReturn(Optional.of(resolution));
         // when
-        Mono<Resolution> expected = service.get(10L);
+        Mono<Resolution> expected = service.get("10");
         // then
         StepVerifier
                 .create(expected)
@@ -58,10 +59,10 @@ class ResolutionServiceTest {
     @Test
     void givenEmptyResolution_WhenGetById_ThenMonoEmpty() {
         // given
-        given(resolutionRepository.findById(anyLong()))
+        given(resolutionRepository.findById(anyString()))
                 .willReturn(Optional.empty());
         // when
-        Mono<Resolution> actual = service.get(11L);
+        Mono<Resolution> actual = service.get("11");
         // then
         StepVerifier
                 .create(actual)
@@ -71,9 +72,9 @@ class ResolutionServiceTest {
     @Test
     void givenList_WhenListAll_ReturnFlux() {
         // given
-        Resolution r1 = Resolution.builder().id(1L).name("r1").build();
-        Resolution r2 = Resolution.builder().id(2L).name("r2").build();
-        Resolution r3 = Resolution.builder().id(3L).name("r3").build();
+        Resolution r1 = Resolution.builder().id("1").name("r1").build();
+        Resolution r2 = Resolution.builder().id("2").name("r2").build();
+        Resolution r3 = Resolution.builder().id("3").name("r3").build();
         given(resolutionRepository.findAll())
                 .willReturn(Arrays.asList(r1, r2, r3));
         // when
@@ -96,7 +97,7 @@ class ResolutionServiceTest {
                 .description("desc")
                 .build();
         given(resolutionRepository.save(any(Resolution.class)))
-                .willReturn(Resolution.builder().id(1L).name("test").description("desc").build());
+                .willReturn(Resolution.builder().id("1").name("test").description("desc").build());
         // when
         Mono<Resolution> actual = service.create(resolution);
         // then

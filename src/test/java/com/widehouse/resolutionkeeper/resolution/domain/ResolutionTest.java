@@ -8,13 +8,13 @@ class ResolutionTest {
     @Test
     void buildResolutionTest() {
         Resolution actual = Resolution.builder()
-                .id(1L)
+                .id("1")
                 .name("resolution")
                 .description("daily resolution")
                 .build();
 
         then(actual)
-                .hasFieldOrPropertyWithValue("id", 1L)
+                .hasFieldOrPropertyWithValue("id", "1")
                 .hasFieldOrPropertyWithValue("name", "resolution")
                 .hasFieldOrPropertyWithValue("description", "daily resolution");
     }
