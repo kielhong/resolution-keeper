@@ -5,6 +5,8 @@ import static org.assertj.core.api.BDDAssertions.then;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 @DataMongoTest
 class ResolutionRepositoryTest {
@@ -19,11 +21,17 @@ class ResolutionRepositoryTest {
                 .description("desc")
                 .build();
         // when
-        Resolution actual = repository.save(resolution);
+        Mono<Resolution> actual = repository.save(resolution);
         // then
-        then(actual)
-                .hasFieldOrProperty("id")
-                .hasFieldOrPropertyWithValue("name", "resolution")
-                .hasFieldOrPropertyWithValue("description", "desc");
+        StepVerifier
+                .create(actual)
+                .assertNext(v -> {
+                    then(v)
+                            .hasFieldOrProperty("id")
+                            .hasFieldOrPropertyWithValue("name", "resolution")
+                            .hasFieldOrPropertyWithValue("description", "desc");
+                })
+                .expectComplete()
+                .verify();
     }
 }

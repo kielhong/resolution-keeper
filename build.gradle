@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'com.widehouse'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.2-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -16,11 +16,11 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 //	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 //	runtimeOnly 'com.h2database:h2'
 //	runtimeOnly 'mysql:mysql-connector-java'
 
@@ -29,7 +29,7 @@ dependencies {
 	}
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
-	testImplementation 'org.springframework.security:spring-security-test'
+//	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {

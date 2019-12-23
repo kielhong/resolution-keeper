@@ -2,16 +2,12 @@ package com.widehouse.resolutionkeeper.resolution.service;
 
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 import com.widehouse.resolutionkeeper.resolution.domain.Resolution;
 import com.widehouse.resolutionkeeper.resolution.domain.ResolutionRepository;
-
-import java.util.Arrays;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,7 +41,7 @@ class ResolutionServiceTest {
                 .description("daybyday")
                 .build();
         given(resolutionRepository.findById(anyString()))
-                .willReturn(Optional.of(resolution));
+                .willReturn(Mono.just(resolution));
         // when
         Mono<Resolution> expected = service.get("10");
         // then
@@ -60,7 +56,7 @@ class ResolutionServiceTest {
     void givenEmptyResolution_WhenGetById_ThenMonoEmpty() {
         // given
         given(resolutionRepository.findById(anyString()))
-                .willReturn(Optional.empty());
+                .willReturn(Mono.empty());
         // when
         Mono<Resolution> actual = service.get("11");
         // then
@@ -76,7 +72,7 @@ class ResolutionServiceTest {
         Resolution r2 = Resolution.builder().id("2").name("r2").build();
         Resolution r3 = Resolution.builder().id("3").name("r3").build();
         given(resolutionRepository.findAll())
-                .willReturn(Arrays.asList(r1, r2, r3));
+                .willReturn(Flux.just(r1, r2, r3));
         // when
         Flux<Resolution> actual = service.list();
         // then
@@ -97,7 +93,7 @@ class ResolutionServiceTest {
                 .description("desc")
                 .build();
         given(resolutionRepository.save(any(Resolution.class)))
-                .willReturn(Resolution.builder().id("1").name("test").description("desc").build());
+                .willReturn(Mono.just(Resolution.builder().id("1").name("test").description("desc").build()));
         // when
         Mono<Resolution> actual = service.create(resolution);
         // then

@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 @RequiredArgsConstructor
 @Service
@@ -19,16 +18,14 @@ public class ResolutionService {
      * @param id resolution id
      */
     public Mono<Resolution> get(String id) {
-        return Mono.fromCallable(() -> resolutionRepository.findById(id))
-                .subscribeOn(Schedulers.boundedElastic())
-                .flatMap(optional -> optional.map(Mono::just).orElseGet(Mono::empty));
+        return resolutionRepository.findById(id);
     }
 
     public Flux<Resolution> list() {
-        return Flux.fromIterable(resolutionRepository.findAll());
+        return resolutionRepository.findAll();
     }
 
     public Mono<Resolution> create(Resolution resolution) {
-        return Mono.just(resolutionRepository.save(resolution));
+        return resolutionRepository.save(resolution);
     }
 }
