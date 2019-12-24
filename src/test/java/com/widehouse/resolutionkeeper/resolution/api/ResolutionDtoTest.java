@@ -14,12 +14,33 @@ class ResolutionDtoTest {
         ResolutionDto dto = new ResolutionDto();
         ReflectionTestUtils.setField(dto, "name", "test");
         ReflectionTestUtils.setField(dto, "description", "desc");
+        ReflectionTestUtils.setField(dto, "sortOrder", 5);
         // when
         Resolution actual = dto.createEntity();
         // then
         then(actual)
                 .hasFieldOrPropertyWithValue("id", null)
                 .hasFieldOrPropertyWithValue("name", "test")
-                .hasFieldOrPropertyWithValue("description", "desc");
+                .hasFieldOrPropertyWithValue("description", "desc")
+                .hasFieldOrPropertyWithValue("sortOrder", 5);
+    }
+
+    @Test
+    void testFromEntity() {
+        // given
+        Resolution resolution = Resolution.builder()
+                .id("10")
+                .name("test")
+                .description("desc")
+                .sortOrder(6)
+                .build();
+        // when
+        ResolutionDto actual = ResolutionDto.from(resolution);
+        // then
+        then(actual)
+                .hasFieldOrPropertyWithValue("id", "10")
+                .hasFieldOrPropertyWithValue("name", "test")
+                .hasFieldOrPropertyWithValue("description", "desc")
+                .hasFieldOrPropertyWithValue("sortOrder", 6);
     }
 }

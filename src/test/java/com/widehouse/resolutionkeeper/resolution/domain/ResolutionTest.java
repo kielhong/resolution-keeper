@@ -11,11 +11,13 @@ class ResolutionTest {
                 .id("1")
                 .name("resolution")
                 .description("daily resolution")
+                .sortOrder(10)
                 .build();
-
+        // then
         then(actual)
                 .hasFieldOrPropertyWithValue("id", "1")
                 .hasFieldOrPropertyWithValue("name", "resolution")
-                .hasFieldOrPropertyWithValue("description", "daily resolution");
+                .hasFieldOrPropertyWithValue("description", "daily resolution")
+                .hasFieldOrPropertyWithValue("sortOrder", 10);
     }
 }

@@ -23,6 +23,7 @@ public class Resolution {
     private String id;
     private String name;
     private String description;
+    private int sortOrder;
 
     @CreatedDate
     private Instant createdAt;
@@ -30,11 +31,12 @@ public class Resolution {
     private Instant updatedAt;
 
     @Builder
-    private static Resolution of(String id, String name, String description) {
+    private static Resolution of(String id, String name, String description, int sortOrder) {
         Resolution resolution = new Resolution();
         resolution.id = id;
         resolution.name = name;
         resolution.description = description;
+        resolution.sortOrder = sortOrder;
 
         return resolution;
     }

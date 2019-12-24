@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -67,16 +68,17 @@ class ResolutionControllerTest {
     @Test
     void whenGetAllResolutions_ThenListAll() {
         // given
-        List<Resolution> list = Arrays.asList(Resolution.builder().id("1").name("r1").description("rd1").build(),
-                Resolution.builder().id("2").name("r2").description("rd2").build(),
-                Resolution.builder().id("3").name("r3").description("rd3").build());
-        given(resolutionService.list())
+        List<Resolution> list = Arrays.asList(
+                Resolution.builder().id("1").name("r1").description("rd1").sortOrder(1).build(),
+                Resolution.builder().id("2").name("r2").description("rd2").sortOrder(2).build(),
+                Resolution.builder().id("3").name("r3").description("rd3").sortOrder(3).build());
+        given(resolutionService.listAll(Sort.by("sortOrder")))
                 .willReturn(Flux.fromIterable(list));
         // when
         webClient.get().uri("/resolutions")
                 .exchange()
                 .expectStatus().isOk();
-        verify(resolutionService).list();
+        verify(resolutionService).listAll(any(Sort.class));
     }
 
     @Test

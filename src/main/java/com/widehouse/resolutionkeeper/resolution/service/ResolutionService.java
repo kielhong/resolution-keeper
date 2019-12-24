@@ -4,14 +4,11 @@ import com.widehouse.resolutionkeeper.resolution.domain.Resolution;
 import com.widehouse.resolutionkeeper.resolution.domain.ResolutionRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ResolutionService {
@@ -25,8 +22,8 @@ public class ResolutionService {
         return resolutionRepository.findById(id);
     }
 
-    public Flux<Resolution> list() {
-        return resolutionRepository.findAll();
+    public Flux<Resolution> listAll(Sort sort) {
+        return resolutionRepository.findAll(sort);
     }
 
     public Mono<Resolution> create(Resolution resolution) {

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -66,15 +67,15 @@ class ResolutionServiceTest {
     }
 
     @Test
-    void givenList_WhenListAll_ReturnFlux() {
+    void givenList_WhenListAllSorted_ReturnSortedFlux() {
         // given
-        Resolution r1 = Resolution.builder().id("1").name("r1").build();
-        Resolution r2 = Resolution.builder().id("2").name("r2").build();
-        Resolution r3 = Resolution.builder().id("3").name("r3").build();
-        given(resolutionRepository.findAll())
+        Resolution r1 = Resolution.builder().id("1").name("r1").sortOrder(1).build();
+        Resolution r2 = Resolution.builder().id("2").name("r2").sortOrder(2).build();
+        Resolution r3 = Resolution.builder().id("3").name("r3").sortOrder(3).build();
+        given(resolutionRepository.findAll(Sort.by("sortOrder")))
                 .willReturn(Flux.just(r1, r2, r3));
         // when
-        Flux<Resolution> actual = service.list();
+        Flux<Resolution> actual = service.listAll(Sort.by("sortOrder"));
         // then
         StepVerifier
                 .create(actual)
@@ -83,6 +84,7 @@ class ResolutionServiceTest {
                 .expectNext(r3)
                 .expectComplete()
                 .verify();
+        verify(resolutionRepository).findAll(any(Sort.class));
     }
 
     @Test
