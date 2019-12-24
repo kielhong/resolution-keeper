@@ -1,4 +1,4 @@
-package com.widehouse.resolutionkeeper.resolution.domain;
+package com.widehouse.resolutionkeeper.resolution.model;
 
 import static org.assertj.core.api.BDDAssertions.then;
 

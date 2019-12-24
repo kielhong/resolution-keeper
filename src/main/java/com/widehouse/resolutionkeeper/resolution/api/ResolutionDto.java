@@ -1,6 +1,6 @@
 package com.widehouse.resolutionkeeper.resolution.api;
 
-import com.widehouse.resolutionkeeper.resolution.domain.Resolution;
+import com.widehouse.resolutionkeeper.resolution.model.Resolution;
 
 import lombok.Getter;
 

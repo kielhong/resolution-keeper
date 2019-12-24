@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-import com.widehouse.resolutionkeeper.resolution.domain.Resolution;
+import com.widehouse.resolutionkeeper.resolution.model.Resolution;
 import com.widehouse.resolutionkeeper.resolution.service.ResolutionService;
 
 import java.util.Arrays;

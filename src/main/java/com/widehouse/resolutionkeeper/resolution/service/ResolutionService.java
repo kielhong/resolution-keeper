@@ -1,7 +1,7 @@
 package com.widehouse.resolutionkeeper.resolution.service;
 
-import com.widehouse.resolutionkeeper.resolution.domain.Resolution;
-import com.widehouse.resolutionkeeper.resolution.domain.ResolutionRepository;
+import com.widehouse.resolutionkeeper.resolution.model.Resolution;
+import com.widehouse.resolutionkeeper.resolution.model.ResolutionRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;

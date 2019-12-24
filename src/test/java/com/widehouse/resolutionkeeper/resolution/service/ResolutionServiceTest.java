@@ -6,8 +6,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-import com.widehouse.resolutionkeeper.resolution.domain.Resolution;
-import com.widehouse.resolutionkeeper.resolution.domain.ResolutionRepository;
+import com.widehouse.resolutionkeeper.resolution.model.Resolution;
+import com.widehouse.resolutionkeeper.resolution.model.ResolutionRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

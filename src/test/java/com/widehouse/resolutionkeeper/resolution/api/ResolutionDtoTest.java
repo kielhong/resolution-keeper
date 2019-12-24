@@ -2,7 +2,7 @@ package com.widehouse.resolutionkeeper.resolution.api;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
-import com.widehouse.resolutionkeeper.resolution.domain.Resolution;
+import com.widehouse.resolutionkeeper.resolution.model.Resolution;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;

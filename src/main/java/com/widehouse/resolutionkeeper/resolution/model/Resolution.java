@@ -1,7 +1,6 @@
-package com.widehouse.resolutionkeeper.resolution.domain;
+package com.widehouse.resolutionkeeper.resolution.model;
 
 import java.time.Instant;
-import java.time.ZonedDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
