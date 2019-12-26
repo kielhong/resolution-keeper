@@ -5,16 +5,19 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
+import com.widehouse.resolutionkeeper.stamp.dto.StampDto;
 import com.widehouse.resolutionkeeper.stamp.model.Stamp;
 import com.widehouse.resolutionkeeper.stamp.service.StampService;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Flux;
@@ -50,11 +53,17 @@ class StampControllerTest {
     }
 
     @Test
-    void givenResolutionId_WhenGetStamps_ThenListStamps() {
+    void givenResolutionId_WhenGetStamps_ThenFluxStampDto() {
         // given
-        Stamp stamp1 = Stamp.builder().id("1").resolutionId("r100").build();
-        Stamp stamp2 = Stamp.builder().id("2").resolutionId("r100").build();
-        Stamp stamp3 = Stamp.builder().id("3").resolutionId("r100").build();
+        StampDto stamp1 = new StampDto();
+        ReflectionTestUtils.setField(stamp1, "id", "1");
+        ReflectionTestUtils.setField(stamp1, "createdDate", LocalDate.of(2019, 11, 01));
+        StampDto stamp2 = new StampDto();
+        ReflectionTestUtils.setField(stamp1, "id", "2");
+        ReflectionTestUtils.setField(stamp1, "createdDate", LocalDate.of(2019, 11, 02));
+        StampDto stamp3 = new StampDto();
+        ReflectionTestUtils.setField(stamp1, "id", "3");
+        ReflectionTestUtils.setField(stamp1, "createdDate", LocalDate.of(2019, 11, 03));
         given(stampService.list(anyString()))
                 .willReturn(Flux.just(stamp1, stamp2, stamp3));
         // when

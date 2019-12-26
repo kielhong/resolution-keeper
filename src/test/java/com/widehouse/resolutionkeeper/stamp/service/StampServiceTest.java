@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
+import com.widehouse.resolutionkeeper.stamp.dto.StampDto;
 import com.widehouse.resolutionkeeper.stamp.model.Stamp;
 import com.widehouse.resolutionkeeper.stamp.model.StampRepository;
 
@@ -52,19 +53,24 @@ class StampServiceTest {
     }
 
     @Test
-    void givenStampsOfResolutions_When_listByResolution_Then_ReturnFluxStamps() {
+    void givenStampsOfResolutions_When_listByResolution_Then_ReturnFluxStampDto() {
         // given
-        Stamp stamp1 = Stamp.builder().id("1").resolutionId("r100").build();
-        Stamp stamp2 = Stamp.builder().id("2").resolutionId("r100").build();
-        Stamp stamp3 = Stamp.builder().id("3").resolutionId("r100").build();
+        Stamp stamp1 = Stamp.builder()
+                .id("1").resolutionId("r100").createdAt(Instant.parse("2019-11-01T00:00:00Z")).build();
+        Stamp stamp2 = Stamp.builder()
+                .id("2").resolutionId("r100").createdAt(Instant.parse("2019-11-02T00:00:00Z")).build();
+        Stamp stamp3 = Stamp.builder()
+                .id("3").resolutionId("r100").createdAt(Instant.parse("2019-11-03T00:00:00Z")).build();
         given(stampRepository.findByResolutionId(anyString()))
                 .willReturn(Flux.just(stamp1, stamp2, stamp3));
         // when
-        Flux<Stamp> result = service.list("r100");
+        Flux<StampDto> result = service.list("r100");
         // then
         StepVerifier
                 .create(result)
-                .expectNext(stamp1, stamp2, stamp3)
+                .assertNext(r -> then(r).extracting("id").isEqualTo("1"))
+                .assertNext(r -> then(r).extracting("id").isEqualTo("2"))
+                .assertNext(r -> then(r).extracting("id").isEqualTo("3"))
                 .verifyComplete();
         verify(stampRepository).findByResolutionId("r100");
     }

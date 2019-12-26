@@ -1,5 +1,6 @@
 package com.widehouse.resolutionkeeper.stamp.service;
 
+import com.widehouse.resolutionkeeper.stamp.dto.StampDto;
 import com.widehouse.resolutionkeeper.stamp.model.Stamp;
 import com.widehouse.resolutionkeeper.stamp.model.StampRepository;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,8 @@ public class StampService {
         return stampRepository.save(stamp);
     }
 
-    public Flux<Stamp> list(String resolutionsId) {
-        return stampRepository.findByResolutionId(resolutionsId);
+    public Flux<StampDto> list(String resolutionsId) {
+        return stampRepository.findByResolutionId(resolutionsId)
+                .map(StampDto::from);
     }
 }

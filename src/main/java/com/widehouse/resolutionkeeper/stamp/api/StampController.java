@@ -1,5 +1,6 @@
 package com.widehouse.resolutionkeeper.stamp.api;
 
+import com.widehouse.resolutionkeeper.stamp.dto.StampDto;
 import com.widehouse.resolutionkeeper.stamp.model.Stamp;
 import com.widehouse.resolutionkeeper.stamp.service.StampService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class StampController {
     }
 
     @GetMapping
-    public Flux<Stamp> listByResolution(@RequestParam String resolutionId) {
+    public Flux<StampDto> listByResolution(@RequestParam String resolutionId) {
         return stampService.list(resolutionId);
     }
 
