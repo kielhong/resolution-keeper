@@ -1,7 +1,15 @@
 package com.widehouse.resolutionkeeper.stamp.api;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
 import com.widehouse.resolutionkeeper.stamp.model.Stamp;
 import com.widehouse.resolutionkeeper.stamp.service.StampService;
+
+import java.time.Instant;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -9,13 +17,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.time.Instant;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @WebFluxTest(StampController.class)
 class StampControllerTest {
@@ -44,5 +47,21 @@ class StampControllerTest {
                 .jsonPath("$.resolutionId").isEqualTo("r100")
                 .jsonPath("$.createdAt").exists();
         verify(stampService).create(any(Stamp.class));
+    }
+
+    @Test
+    void givenResolutionId_WhenGetStamps_ThenListStamps() {
+        // given
+        Stamp stamp1 = Stamp.builder().id("1").resolutionId("r100").build();
+        Stamp stamp2 = Stamp.builder().id("2").resolutionId("r100").build();
+        Stamp stamp3 = Stamp.builder().id("3").resolutionId("r100").build();
+        given(stampService.list(anyString()))
+                .willReturn(Flux.just(stamp1, stamp2, stamp3));
+        // when
+        webClient.get().uri("/stamps?resolutionId={rId}", "r100")
+                .exchange()
+                .expectStatus().isOk();
+        // then
+        verify(stampService).list("r100");
     }
 }
