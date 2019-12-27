@@ -6,20 +6,23 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 import lombok.Getter;
-import lombok.ToString;
 
-@ToString
 @Getter
 public class StampDto {
     private String id;
     private String resolutionId;
-    private LocalDate createdDate;
+    private LocalDate stampDate;
 
-    public static StampDto from(Stamp stamp) {
+    /**
+     * constructor static method.
+     * @param stamp Stamp Entity
+     * @param zoneId base ZoneId
+     */
+    public static StampDto from(Stamp stamp, ZoneId zoneId) {
         StampDto dto = new StampDto();
         dto.id = stamp.getId();
         dto.resolutionId = stamp.getResolutionId();
-        dto.createdDate = stamp.getCreatedAt().atZone(ZoneId.systemDefault()).toLocalDate();
+        dto.stampDate = stamp.getCreatedAt().atZone(zoneId).toLocalDate();
         return dto;
     }
 }

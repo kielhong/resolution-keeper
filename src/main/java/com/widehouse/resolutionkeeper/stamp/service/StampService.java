@@ -4,6 +4,7 @@ import com.widehouse.resolutionkeeper.stamp.dto.StampDto;
 import com.widehouse.resolutionkeeper.stamp.model.Stamp;
 import com.widehouse.resolutionkeeper.stamp.model.StampRepository;
 
+import java.time.ZoneId;
 import java.util.Comparator;
 
 import org.springframework.stereotype.Service;
@@ -13,9 +14,11 @@ import reactor.core.publisher.Mono;
 @Service
 public class StampService {
     private StampRepository stampRepository;
+    private ZoneId zoneId;
 
     public StampService(StampRepository stampRepository) {
         this.stampRepository = stampRepository;
+        this.zoneId = ZoneId.systemDefault();
     }
 
     public Mono<Stamp> create(Stamp stamp) {
@@ -24,8 +27,8 @@ public class StampService {
 
     public Flux<StampDto> list(String resolutionsId) {
         return stampRepository.findByResolutionId(resolutionsId)
-                .map(StampDto::from)
-                .distinct(StampDto::getCreatedDate)
-                .sort(Comparator.comparing(StampDto::getCreatedDate));
+                .map(s -> StampDto.from(s, this.zoneId))
+                .distinct(StampDto::getStampDate)
+                .sort(Comparator.comparing(StampDto::getStampDate));
     }
 }

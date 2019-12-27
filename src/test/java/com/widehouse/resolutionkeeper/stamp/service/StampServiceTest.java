@@ -104,7 +104,7 @@ class StampServiceTest {
             // then
             StepVerifier
                     .create(result)
-                    .assertNext(r -> then(r.getCreatedDate()).isEqualTo(LocalDate.of(2019, 11, 01)))
+                    .assertNext(r -> then(r.getStampDate()).isEqualTo(LocalDate.of(2019, 11, 1)))
                     .verifyComplete();
         }
 
@@ -119,9 +119,9 @@ class StampServiceTest {
             // then
             StepVerifier
                     .create(result)
-                    .assertNext(r -> then(r).extracting("createdDate").isEqualTo(LocalDate.of(2019, 11, 1)))
-                    .assertNext(r -> then(r).extracting("createdDate").isEqualTo(LocalDate.of(2019, 11, 2)))
-                    .assertNext(r -> then(r).extracting("createdDate").isEqualTo(LocalDate.of(2019, 11, 3)))
+                    .assertNext(r -> then(r).extracting("stampDate").isEqualTo(LocalDate.of(2019, 11, 1)))
+                    .assertNext(r -> then(r).extracting("stampDate").isEqualTo(LocalDate.of(2019, 11, 2)))
+                    .assertNext(r -> then(r).extracting("stampDate").isEqualTo(LocalDate.of(2019, 11, 3)))
                     .verifyComplete();
             verify(stampRepository).findByResolutionId("r100");
         }

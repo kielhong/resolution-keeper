@@ -12,8 +12,6 @@ import com.widehouse.resolutionkeeper.stamp.service.StampService;
 import java.time.Instant;
 import java.time.LocalDate;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -59,13 +57,13 @@ class StampControllerTest {
         // given
         StampDto stamp1 = new StampDto();
         ReflectionTestUtils.setField(stamp1, "id", "1");
-        ReflectionTestUtils.setField(stamp1, "createdDate", LocalDate.of(2019, 11, 01));
+        ReflectionTestUtils.setField(stamp1, "stampDate", LocalDate.of(2019, 11, 01));
         StampDto stamp2 = new StampDto();
         ReflectionTestUtils.setField(stamp1, "id", "2");
-        ReflectionTestUtils.setField(stamp1, "createdDate", LocalDate.of(2019, 11, 02));
+        ReflectionTestUtils.setField(stamp1, "stampDate", LocalDate.of(2019, 11, 02));
         StampDto stamp3 = new StampDto();
         ReflectionTestUtils.setField(stamp1, "id", "3");
-        ReflectionTestUtils.setField(stamp1, "createdDate", LocalDate.of(2019, 11, 03));
+        ReflectionTestUtils.setField(stamp1, "stampDate", LocalDate.of(2019, 11, 03));
         given(stampService.list(anyString()))
                 .willReturn(Flux.just(stamp1, stamp2, stamp3));
         // when
