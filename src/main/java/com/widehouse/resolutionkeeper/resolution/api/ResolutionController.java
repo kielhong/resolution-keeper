@@ -1,5 +1,6 @@
 package com.widehouse.resolutionkeeper.resolution.api;
 
+import com.widehouse.resolutionkeeper.resolution.dto.ResolutionDto;
 import com.widehouse.resolutionkeeper.resolution.model.Resolution;
 import com.widehouse.resolutionkeeper.resolution.service.ResolutionService;
 
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,6 +46,11 @@ public class ResolutionController {
     @PostMapping
     public Mono<Resolution> create(@RequestBody ResolutionDto dto) {
         return resolutionService.create(dto.createEntity());
+    }
+
+    @PutMapping("{id}")
+    public Mono<Resolution> update(@PathVariable String id, @RequestBody ResolutionDto dto) {
+        return resolutionService.update(id, dto);
     }
 
     @DeleteMapping("{id}")

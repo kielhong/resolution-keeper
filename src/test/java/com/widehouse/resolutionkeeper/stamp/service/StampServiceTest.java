@@ -61,6 +61,7 @@ class StampServiceTest {
         private Stamp stamp1;
         private Stamp stamp2;
         private Stamp stamp3;
+
         @BeforeEach
         void setUp() {
             stamp1 = Stamp.builder()

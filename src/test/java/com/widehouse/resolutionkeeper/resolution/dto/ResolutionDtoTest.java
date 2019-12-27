@@ -1,4 +1,4 @@
-package com.widehouse.resolutionkeeper.resolution.api;
+package com.widehouse.resolutionkeeper.resolution.dto;
 
 import static org.assertj.core.api.BDDAssertions.then;
 

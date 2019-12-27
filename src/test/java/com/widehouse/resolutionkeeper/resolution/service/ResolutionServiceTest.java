@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
+import com.widehouse.resolutionkeeper.resolution.dto.ResolutionDto;
 import com.widehouse.resolutionkeeper.resolution.model.Resolution;
 import com.widehouse.resolutionkeeper.resolution.model.ResolutionRepository;
 
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.util.ReflectionTestUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -119,4 +121,37 @@ class ResolutionServiceTest {
         // then
         verify(resolutionRepository).deleteById("13");
     }
+
+    @Test
+    void givenResolution_when_update_then_returnUpdatedMonoResolution() {
+        // given
+        given(resolutionRepository.findById(anyString()))
+                .willReturn(Mono.just(Resolution.builder().id("14").name("name").description("desc")
+                        .sortOrder(1).build()));
+        given(resolutionRepository.save(any(Resolution.class)))
+                .willReturn(Mono.just(Resolution.builder().id("14").name("new name").description("new description")
+                        .sortOrder(10).build()));
+        // when
+        ResolutionDto dto = new ResolutionDto();
+        ReflectionTestUtils.setField(dto, "name", "new name");
+        ReflectionTestUtils.setField(dto, "description", "new description");
+        ReflectionTestUtils.setField(dto, "sortOrder", 10);
+
+        Mono<Resolution> actual = service.update("14", dto);
+        // then
+        StepVerifier
+                .create(actual)
+                .expectNextMatches(r -> {
+                    then(r)
+                        .hasFieldOrPropertyWithValue("id", "14")
+                        .hasFieldOrPropertyWithValue("name", "new name")
+                        .hasFieldOrPropertyWithValue("description", "new description")
+                        .hasFieldOrPropertyWithValue("sortOrder", 10);
+                    return true;
+                })
+                .verifyComplete();
+        verify(resolutionRepository).findById("14");
+        verify(resolutionRepository).save(any(Resolution.class));
+    }
+
 }

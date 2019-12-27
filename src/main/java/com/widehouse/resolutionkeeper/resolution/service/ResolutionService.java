@@ -1,5 +1,6 @@
 package com.widehouse.resolutionkeeper.resolution.service;
 
+import com.widehouse.resolutionkeeper.resolution.dto.ResolutionDto;
 import com.widehouse.resolutionkeeper.resolution.model.Resolution;
 import com.widehouse.resolutionkeeper.resolution.model.ResolutionRepository;
 
@@ -32,5 +33,13 @@ public class ResolutionService {
 
     public Mono<Void> remove(String id) {
         return resolutionRepository.deleteById(id);
+    }
+
+    public Mono<Resolution> update(String id, ResolutionDto dto) {
+        return resolutionRepository.findById(id)
+                .flatMap(r -> {
+                    r.update(dto);
+                    return resolutionRepository.save(r);
+                });
     }
 }

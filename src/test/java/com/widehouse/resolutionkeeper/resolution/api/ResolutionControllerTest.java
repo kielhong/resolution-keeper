@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
+import com.widehouse.resolutionkeeper.resolution.dto.ResolutionDto;
 import com.widehouse.resolutionkeeper.resolution.model.Resolution;
 import com.widehouse.resolutionkeeper.resolution.service.ResolutionService;
 
@@ -110,5 +111,29 @@ class ResolutionControllerTest {
                 .exchange()
                 .expectStatus().isOk();
         verify(resolutionService).remove("13");
+    }
+
+    @Test
+    void givenResolution_when_update_then_200OkAndReturnModifiedResolution() {
+        // given
+        Resolution resolution = Resolution.builder()
+                .name("update test")
+                .description("update desc")
+                .sortOrder(2)
+                .build();
+        given(resolutionService.update(anyString(), any(ResolutionDto.class)))
+                .willReturn(Mono.just(Resolution.builder().id("14").name("update test").description("update desc")
+                        .sortOrder(2).build()));
+        // when
+        webClient.put().uri("/resolutions/{id}", 14)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(resolution))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.id").exists()
+                .jsonPath("$.name").isEqualTo("update test")
+                .jsonPath("$.description").isEqualTo("update desc");
+        verify(resolutionService).update(anyString(), any(ResolutionDto.class));
     }
 }

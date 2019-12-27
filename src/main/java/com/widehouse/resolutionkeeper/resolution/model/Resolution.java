@@ -1,5 +1,7 @@
 package com.widehouse.resolutionkeeper.resolution.model;
 
+import com.widehouse.resolutionkeeper.resolution.dto.ResolutionDto;
+
 import java.time.Instant;
 
 import lombok.AllArgsConstructor;
@@ -38,5 +40,11 @@ public class Resolution {
         resolution.sortOrder = sortOrder;
 
         return resolution;
+    }
+
+    public void update(ResolutionDto dto) {
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.sortOrder = dto.getSortOrder();
     }
 }
