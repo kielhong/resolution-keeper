@@ -4,6 +4,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/resolution
+  thymeleaf:
+    cache: false
 logging.level:
   org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG
 #  reactor.core.publisher: INFO
