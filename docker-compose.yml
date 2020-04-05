@@ -1,0 +1,15 @@
+version: "3.2"
+
+services:
+  mongodb:
+    image: mongo
+    restart: always # container를 실행할 때 항상 이미 수행중이라면 재시작을 수행합니다.
+    container_name: 'mongodb' # container의 name
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: resolution
+    volumes:        # container -> local mount
+      - ./data/db:/data/db
+    ports:                # service port
+      - "27017:27017"

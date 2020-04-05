@@ -11,4 +11,4 @@ build/
 out/
 
 ### Docker ###
-config/docker/data/
+data/db/
